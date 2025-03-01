@@ -77,17 +77,20 @@ Ensure the Deployment comes up and both Pods execute side-by-side.
 
 **Answer**
 
-Add the container config to the `.spec.template.spec.containers` section of the `db-deploy.yml` YAML file. This block should be nested at the same level as the "db" container as shown below.
+Add the container config to the `.spec.template.spec.initContainers` section of the `db-deploy.yml` YAML file. Sidecar containers are deployed as init containers with restartPolicy set to Always.
 
 ```
     spec:
-      containers:
-        - name: db
-        <Snip>
+      initContainers:
         - name: db-admin
           image: adminer
+          restartPolicy: Always
           ports:
             - containerPort: 8080
+      containers:
+        - name: db
+        ....
+
 ```
 
 Save your changes.
